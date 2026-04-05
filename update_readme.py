@@ -68,6 +68,9 @@ def dir_to_collapsed_section(directory: str, start_level: int, file_parser: typi
       return "\n".join(lines)
 
     immediate_dir = path.rsplit("/", 2)[-2]
+
+    if immediate_dir in atcoder_contests["contest_name"]:
+      immediate_dir = immediate_dir + " - " + atcoder_contests["contest_name"][immediate_dir]
     section = Markdown.collapsed_section(
       summary=immediate_dir,
       lines=lines
@@ -84,7 +87,7 @@ def atcoder_parser(path: str) -> str:
   task_name = atcoder_contest_details["task_name"][(contest_code, task_code)]
   task_link = f"https://atcoder.jp{atcoder_contest_details["task_link"][(contest_code, task_code)]}"
 
-  return Markdown.link(text=filename, href=path) + " - " + Markdown.link(text=task_name, href=task_link)
+  return filename + " - " + Markdown.link(text=task_name, href=task_link)
 
 def main():
   subprocess.run(["python3", "update_links.py"])
