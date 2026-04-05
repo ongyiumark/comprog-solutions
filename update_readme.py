@@ -4,12 +4,10 @@ import typing
 import subprocess
 
 from utils import Markdown
+from utils import CONTESTS_CACHE, CONTEST_DETAILS_CACHE, ATCODER_PATH, CODEFORCES_PATH
 
 import pandas as pd
 
-CONTESTS_CACHE = "contest_data/contests.csv"
-CONTEST_DETAILS_CACHE = "contest_data/contest_details.csv"
-ATCODER_PATH = "AtCoder"
 contests = None
 contest_details = None
 
@@ -106,7 +104,7 @@ def dir_to_collapsed_section(directory: str, start_level: int, file_parser: typi
       return "\n".join(lines)
 
     section = Markdown.collapsed_section(
-      summary=atcoder_parser(path),
+      summary=file_parser(path),
       lines=lines
     )
     return section
@@ -120,7 +118,7 @@ def load_cache():
   contests = pd.read_csv(CONTESTS_CACHE).set_index("contest_code").to_dict()
   contest_details = pd.read_csv(CONTEST_DETAILS_CACHE).set_index(["contest_code", "task_code"]).to_dict()
 
-def atcoder_parser(path: str) -> str:
+def atcoder_cf_parser(path: str, base_link: str) -> str:
   if os.path.isfile(path):
     filename = os.path.basename(path)
     basename, _ = split_extension(filename)
@@ -128,7 +126,7 @@ def atcoder_parser(path: str) -> str:
     task_code = task_code.split("_", 1)[0]
 
     task_name = contest_details["task_name"][(contest_code, task_code)]
-    task_link = f"https://atcoder.jp{contest_details["task_link"][(contest_code, task_code)]}"
+    task_link = f"{base_link}{contest_details["task_link"][(contest_code, task_code)]}"
 
     return f"{filename} - {Markdown.link(text=task_name, href=task_link)}"
 
@@ -141,17 +139,25 @@ def atcoder_parser(path: str) -> str:
 def main():
   subprocess.run(["python3", "update_links.py"])
   load_cache()
+  
+  target_folders = [ATCODER_PATH, CODEFORCES_PATH]
 
   stat_table = Markdown.table(
     header=["Category", "Number Solved"],
     alignment=["c", "c"],
-    data=[[ATCODER_PATH], [str(count_files(ATCODER_PATH))]]
+    data=[target_folders,[str(count_files(path)) for path in target_folders]]
   )
 
   atcoder_section = dir_to_collapsed_section(
     ATCODER_PATH, 
     start_level=0,
-    file_parser=atcoder_parser
+    file_parser=lambda x: atcoder_cf_parser(x, base_link="https://atcoder.jp")
+  )
+
+  codeforces_section = dir_to_collapsed_section(
+    CODEFORCES_PATH,
+    start_level=0,
+    file_parser=lambda x: atcoder_cf_parser(x, base_link="https://codeforces.com")
   )
 
   readme = Markdown("README.md")
@@ -165,6 +171,7 @@ def main():
       "All Problems",
       Markdown.hrule(),
       atcoder_section,
+      codeforces_section,
       "",
       usage_instructions()
     ]

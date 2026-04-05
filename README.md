@@ -4,6 +4,7 @@ This is an archive of the problems that I've solved starting Apr 2026.
 |Category|Number Solved|
 |:-:|:-:|
 |AtCoder|21|
+|Codeforces|7|
 
 All Problems
 ---
@@ -45,6 +46,29 @@ All Problems
 - ABC452_E.cpp - [You WILL Like Sigma Problem](https://atcoder.jp/contests/ABC452/tasks/abc452_e)
 - ABC452_F.cpp - [Interval Inversion Count](https://atcoder.jp/contests/ABC452/tasks/abc452_f)
 - ABC452_G.cpp - [221 Substring](https://atcoder.jp/contests/ABC452/tasks/abc452_g)
+</details>
+</details>
+</details>
+<details>
+<summary>Codeforces</summary>
+
+<details>
+<summary>Contests</summary>
+
+<details>
+<summary>Div 4</summary>
+
+<details>
+<summary>CFC2218 - Codeforces Round 1090 (Div. 4)</summary>
+
+- CFC2218_A.py - [The 67th Integer Problem](https://codeforces.com/contest/2218/problem/A)
+- CFC2218_B.py - [The 67th 6-7 Integer Problem](https://codeforces.com/contest/2218/problem/B)
+- CFC2218_C.py - [The 67th Permutation Problem](https://codeforces.com/contest/2218/problem/C)
+- CFC2218_D.cpp - [The 67th OEIS Problem](https://codeforces.com/contest/2218/problem/D)
+- CFC2218_E.cpp - [The 67th XOR Problem](https://codeforces.com/contest/2218/problem/E)
+- CFC2218_F.cpp - [The 67th Tree Problem](https://codeforces.com/contest/2218/problem/F)
+- CFC2218_G.cpp - [The 67th Iteration of "Counting is Fun"](https://codeforces.com/contest/2218/problem/G)
+</details>
 </details>
 </details>
 </details>

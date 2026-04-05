@@ -85,7 +85,6 @@ class Markdown:
   def hrule():
     return "---"
   
-
 class Task:
   def __init__(self, task_code, task_name, task_link):
     self.task_code = task_code
@@ -112,3 +111,8 @@ class Contest:
   
   def add_tasks(self, tasks: list[Task]):
     self.tasks.extend(tasks)
+
+CONTESTS_CACHE = "contest_data/contests.csv"
+CONTEST_DETAILS_CACHE = "contest_data/contest_details.csv"
+ATCODER_PATH = "AtCoder"
+CODEFORCES_PATH = "Codeforces"
