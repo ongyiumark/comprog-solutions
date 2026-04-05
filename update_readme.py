@@ -1,53 +1,18 @@
 import os
 import re
+import typing
+import subprocess
 
-class Markdown:
-  def __init__(self, output_path: str):
-    self.output_path = output_path
-    self.text = ""
-  
-  def write(self):
-    with open(self.output_path, "w") as f:
-      f.write(self.text)
+from utils import Markdown
 
-  def add(self, other_text: str):
-    self.text += other_text
+import pandas as pd
 
-  def add_line(self, line: str):
-    self.add(line)
-    self.add("\n")
-  
-  def add_lines(self, lines: list[str]):
-    for line in lines:
-      self.add_line(line)
-  
-  def __repr__(self):
-    return self.text
+ATCODER_CONTESTS_CACHE = "contest_data/atcoder_contests.csv"
+ATCODER_CONTEST_DETAILS_CACHE = "contest_data/atcoder_contest_details.csv"
+ATCODER_PATH = "AtCoder/"
+atcoder_contests = None
+atcoder_contest_details = None
 
-  @staticmethod
-  def dedent(text: str) -> str:
-    lines = text.split("\n")
-    lines = [line.lstrip() for line in lines]
-    return "\n".join(lines)
-
-  @staticmethod
-  def collapsed_section(summary: str, lines: list[str]) -> str:
-    """Returns a collapsed section in markdown."""
-    text = f"""<details>
-    <summary>{summary}</summary>
-
-    {"\n".join(lines)}
-    </details>"""
-    return Markdown.dedent(text)
-
-  @staticmethod
-  def link(text: str, href: str) -> str:
-    """Returns a link in markdown."""
-    return f"[{text}]({href})"
-
-  @staticmethod
-  def header(text: str, level: int = 1):
-    return f"{'#'*level} {text}"
 
 def is_comment(text: str, lang: str) -> bool:
   if lang == "cpp":
@@ -67,15 +32,14 @@ def split_extension(text: str) -> tuple[str, str]:
   
   return (text[:last_dot], text[last_dot+1:])
 
-def parse_file(path: str) -> str:
-  filename = os.path.basename(path)
+def get_link(path: str) -> str:
   with open(path, "r") as f:
     # grab comment on first line
     first_line = f.readline()
-  
-  basename, ext = split_extension(filename)
+
+  basename, ext = split_extension(os.path.basename(path))
   if not is_comment(first_line, ext):
-    return filename
+    return None
 
   prefixes = ["\"\"\"", "\'\'\'", "/*", "//", "#"]
   suffixes = ["\"\"\"", "\'\'\'", "*/"]
@@ -86,9 +50,9 @@ def parse_file(path: str) -> str:
     first_line = first_line.removesuffix(suffix)
   href = first_line.strip()
   
-  return Markdown.link(text=filename, href=href)
+  return href
 
-def dir_to_collapsed_section(directory: str, start_level: int):
+def dir_to_collapsed_section(directory: str, start_level: int, file_parser: typing.Callable[[str], str]):
   def traverse(path: str, level: str) -> str:
     files_and_dir = sorted(os.listdir(path))
     
@@ -98,7 +62,7 @@ def dir_to_collapsed_section(directory: str, start_level: int):
         result = traverse(os.path.join(path, fd)+"/", level+1)
         lines.extend(result.split("\n"))
       else:
-        lines.append(f"- {parse_file(os.path.join(path, fd))}")
+        lines.append(f"- {file_parser(os.path.join(path, fd))}")
     
     if level < start_level:
       return "\n".join(lines)
@@ -112,8 +76,18 @@ def dir_to_collapsed_section(directory: str, start_level: int):
   
   return traverse(directory, 0)
 
+def atcoder_parser(path: str) -> str:
+  filename = os.path.basename(path)
+  basename, ext = split_extension(filename)
+  contest_code, task_code = basename.split("_")
+
+  task_name = atcoder_contest_details["task_name"][(contest_code, task_code)]
+  task_link = f"https://atcoder.jp{atcoder_contest_details["task_link"][(contest_code, task_code)]}"
+
+  return Markdown.link(text=filename, href=path) + " - " + Markdown.link(text=task_name, href=task_link)
 
 def main():
+  subprocess.run(["python3", "update_links.py"])
   readme = Markdown("README.md")
   readme.add_lines(
     [
@@ -121,8 +95,17 @@ def main():
       "This is an archive of the problems that I've solved."
     ]
   )
-  
-  atcoder_section = dir_to_collapsed_section("AtCoder/", start_level=0)
+
+  global atcoder_contests
+  global atcoder_contest_details
+  atcoder_contests = pd.read_csv(ATCODER_CONTESTS_CACHE).set_index("contest_code").to_dict()
+  atcoder_contest_details = pd.read_csv(ATCODER_CONTEST_DETAILS_CACHE).set_index(["contest_code", "task_code"]).to_dict()
+
+  atcoder_section = dir_to_collapsed_section(
+    ATCODER_PATH, 
+    start_level=0,
+    file_parser=atcoder_parser
+  )
   readme.add_line(atcoder_section)
   readme.write()
 

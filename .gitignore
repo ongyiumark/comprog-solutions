@@ -1,2 +1,6 @@
 ongoing/
 venv/
+basura*
+
+# Python Stuff
+__pycache__/
