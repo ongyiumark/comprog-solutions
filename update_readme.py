@@ -151,7 +151,8 @@ def atcoder_cf_parser(path: str, base_link: str) -> str:
     task_name = contest_details["task_name"][(contest_code, task_code)]
     task_link = f"{base_link}{contest_details["task_link"][(contest_code, task_code)]}"
 
-    return f"{filename} - {Markdown.link(text=task_name, href=task_link)}"
+    relative_link = f"/{path.replace(" ", "%20")}"
+    return f"{Markdown.link(text=filename, href=relative_link)} - {Markdown.link(text=task_name, href=task_link)}"
 
   dirname = os.path.basename(path)
   if dirname in contests["contest_name"]:
