@@ -3,7 +3,7 @@ This is an archive of the problems that I've solved starting Apr 2026.
 
 |Category|Number Solved|
 |:-:|:-:|
-|AtCoder|26|
+|AtCoder|27|
 |Codeforces|7|
 
 All Problems
@@ -22,6 +22,7 @@ All Problems
 - [ABC449_C.py](/AtCoder/ABC%20400-499/ABC449/ABC449_C.py) - [Comfortable Distance](https://atcoder.jp/contests/ABC449/tasks/abc449_c)
 - [ABC449_D.cpp](/AtCoder/ABC%20400-499/ABC449/ABC449_D.cpp) - [Make Target 2](https://atcoder.jp/contests/ABC449/tasks/abc449_d)
 - [ABC449_E.cpp](/AtCoder/ABC%20400-499/ABC449/ABC449_E.cpp) - [A += v](https://atcoder.jp/contests/ABC449/tasks/abc449_e)
+- [ABC449_F.cpp](/AtCoder/ABC%20400-499/ABC449/ABC449_F.cpp) - [Grid Clipping](https://atcoder.jp/contests/ABC449/tasks/abc449_f)
 </details>
 <details>
 <summary>ABC450 - AtCoder Beginner Contest 450</summary>
@@ -87,7 +88,6 @@ To Upsolve
 <details>
 <summary>ABC449 - AtCoder Beginner Contest 449</summary>
 
-- F - [Grid Clipping](https://atcoder.jp/contests/ABC449/tasks/abc449_f)
 - G - [Many Repunit Sum 2 ](https://atcoder.jp/contests/ABC449/tasks/abc449_g)
 </details>
 
