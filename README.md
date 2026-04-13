@@ -3,7 +3,7 @@ This is an archive of the problems that I've solved starting Apr 2026.
 
 |Category|Number Solved|
 |:-:|:-:|
-|AtCoder|32|
+|AtCoder|34|
 |Codeforces|7|
 
 All Problems
@@ -23,6 +23,7 @@ All Problems
 - [ABC449_D.cpp](/AtCoder/ABC%20400-499/ABC449/ABC449_D.cpp) - [Make Target 2](https://atcoder.jp/contests/ABC449/tasks/abc449_d)
 - [ABC449_E.cpp](/AtCoder/ABC%20400-499/ABC449/ABC449_E.cpp) - [A += v](https://atcoder.jp/contests/ABC449/tasks/abc449_e)
 - [ABC449_F.cpp](/AtCoder/ABC%20400-499/ABC449/ABC449_F.cpp) - [Grid Clipping](https://atcoder.jp/contests/ABC449/tasks/abc449_f)
+- [ABC449_G.cpp](/AtCoder/ABC%20400-499/ABC449/ABC449_G.cpp) - [Many Repunit Sum 2 ](https://atcoder.jp/contests/ABC449/tasks/abc449_g)
 </details>
 <details>
 <summary>ABC450 - AtCoder Beginner Contest 450</summary>
@@ -65,6 +66,7 @@ All Problems
 - [ABC453_C.cpp](/AtCoder/ABC%20400-499/ABC453/ABC453_C.cpp) - [Sneaking Glances](https://atcoder.jp/contests/ABC453/tasks/abc453_c)
 - [ABC453_D.cpp](/AtCoder/ABC%20400-499/ABC453/ABC453_D.cpp) - [Go Straight](https://atcoder.jp/contests/ABC453/tasks/abc453_d)
 - [ABC453_E.cpp](/AtCoder/ABC%20400-499/ABC453/ABC453_E.cpp) - [Team Division](https://atcoder.jp/contests/ABC453/tasks/abc453_e)
+- [ABC453_G.cpp](/AtCoder/ABC%20400-499/ABC453/ABC453_G.cpp) - [Copy Query](https://atcoder.jp/contests/ABC453/tasks/abc453_g)
 </details>
 </details>
 </details>
@@ -95,15 +97,9 @@ All Problems
 To Upsolve
 ---
 <details>
-<summary>ABC449 - AtCoder Beginner Contest 449</summary>
-
-- G - [Many Repunit Sum 2 ](https://atcoder.jp/contests/ABC449/tasks/abc449_g)
-</details>
-<details>
 <summary>ABC453 - AtCoder Beginner Contest 453</summary>
 
 - F - [Avoid Division](https://atcoder.jp/contests/ABC453/tasks/abc453_f)
-- G - [Copy Query](https://atcoder.jp/contests/ABC453/tasks/abc453_g)
 </details>
 
 Usage Instructions
