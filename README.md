@@ -3,7 +3,7 @@ This is an archive of the problems that I've solved starting Apr 2026.
 
 |Category|Number Solved|
 |:-:|:-:|
-|AtCoder|34|
+|AtCoder|40|
 |Codeforces|7|
 
 All Problems
@@ -14,6 +14,16 @@ All Problems
 <details>
 <summary>ABC 400-499</summary>
 
+<details>
+<summary>ABC448 - AtCoder Beginner Contest 448</summary>
+
+- [ABC448_A.cpp](/AtCoder/ABC%20400-499/ABC448/ABC448_A.cpp) - [chmin](https://atcoder.jp/contests/ABC448/tasks/abc448_a)
+- [ABC448_B.cpp](/AtCoder/ABC%20400-499/ABC448/ABC448_B.cpp) - [Pepper Addiction](https://atcoder.jp/contests/ABC448/tasks/abc448_b)
+- [ABC448_C.cpp](/AtCoder/ABC%20400-499/ABC448/ABC448_C.cpp) - [Except and Min](https://atcoder.jp/contests/ABC448/tasks/abc448_c)
+- [ABC448_D.cpp](/AtCoder/ABC%20400-499/ABC448/ABC448_D.cpp) - [Integer-duplicated Path](https://atcoder.jp/contests/ABC448/tasks/abc448_d)
+- [ABC448_E.cpp](/AtCoder/ABC%20400-499/ABC448/ABC448_E.cpp) - [Simple Division](https://atcoder.jp/contests/ABC448/tasks/abc448_e)
+- [ABC448_F.cpp](/AtCoder/ABC%20400-499/ABC448/ABC448_F.cpp) - [Authentic Traveling Salesman Problem](https://atcoder.jp/contests/ABC448/tasks/abc448_f)
+</details>
 <details>
 <summary>ABC449 - AtCoder Beginner Contest 449</summary>
 
@@ -96,6 +106,11 @@ All Problems
 
 To Upsolve
 ---
+<details>
+<summary>ABC448 - AtCoder Beginner Contest 448</summary>
+
+- G - [Conquest](https://atcoder.jp/contests/ABC448/tasks/abc448_g)
+</details>
 <details>
 <summary>ABC453 - AtCoder Beginner Contest 453</summary>
 
