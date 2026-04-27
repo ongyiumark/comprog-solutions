@@ -3,7 +3,7 @@ This is an archive of the problems that I've solved starting Apr 2026.
 
 |Category|Number Solved|
 |:-:|:-:|
-|AtCoder|44|
+|AtCoder|50|
 |Codeforces|12|
 
 All Problems
@@ -86,6 +86,16 @@ All Problems
 - [ABC454_C.cpp](/AtCoder/ABC%20400-499/ABC454/ABC454_C.cpp) - [Straw Millionaire](https://atcoder.jp/contests/ABC454/tasks/abc454_c)
 - [ABC454_D.cpp](/AtCoder/ABC%20400-499/ABC454/ABC454_D.cpp) - [(xx)](https://atcoder.jp/contests/ABC454/tasks/abc454_d)
 </details>
+<details>
+<summary>ABC455 - Ｓｋｙ Inc, Programming Contest 2026 (AtCoder Beginner Contest 455)</summary>
+
+- [ABC455_A.cpp](/AtCoder/ABC%20400-499/ABC455/ABC455_A.cpp) - [455](https://atcoder.jp/contests/ABC455/tasks/abc455_a)
+- [ABC455_B.cpp](/AtCoder/ABC%20400-499/ABC455/ABC455_B.cpp) - [Spiral Galaxy](https://atcoder.jp/contests/ABC455/tasks/abc455_b)
+- [ABC455_C.cpp](/AtCoder/ABC%20400-499/ABC455/ABC455_C.cpp) - [Vanish](https://atcoder.jp/contests/ABC455/tasks/abc455_c)
+- [ABC455_D.cpp](/AtCoder/ABC%20400-499/ABC455/ABC455_D.cpp) - [Card Pile Query](https://atcoder.jp/contests/ABC455/tasks/abc455_d)
+- [ABC455_E.cpp](/AtCoder/ABC%20400-499/ABC455/ABC455_E.cpp) - [Unbalanced ABC Substrings](https://atcoder.jp/contests/ABC455/tasks/abc455_e)
+- [ABC455_F.cpp](/AtCoder/ABC%20400-499/ABC455/ABC455_F.cpp) - [Merge Slimes 2](https://atcoder.jp/contests/ABC455/tasks/abc455_f)
+</details>
 </details>
 </details>
 <details>
@@ -143,6 +153,11 @@ To Upsolve
 - E - [LRUD Moving](https://atcoder.jp/contests/ABC454/tasks/abc454_e)
 - F - [Make it Palindrome 2](https://atcoder.jp/contests/ABC454/tasks/abc454_f)
 - G - [Mode in the Subtree](https://atcoder.jp/contests/ABC454/tasks/abc454_g)
+</details>
+<details>
+<summary>ABC455 - Ｓｋｙ Inc, Programming Contest 2026 (AtCoder Beginner Contest 455)</summary>
+
+- G - [Balanced Subarrays](https://atcoder.jp/contests/ABC455/tasks/abc455_g)
 </details>
 <details>
 <summary>CFC2220 - Codeforces Round 1093 (Div. 2)</summary>
