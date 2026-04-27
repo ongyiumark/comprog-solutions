@@ -1,20 +1,19 @@
+""" Updates the README.md file to reflect the latest information. """
+
 import os
 import re
-import typing
 import subprocess
-
-from utils import Markdown
-from utils import (
-  CONTESTS_CACHE, CONTEST_DETAILS_CACHE, 
-  ATCODER_PATH, CODEFORCES_PATH,
-  ATCODER_DOMAIN, CODEFORCES_DOMAIN
-)
+import typing
 
 import pandas as pd
 
-contests = None
-contest_details = None
-contest_tasks = None
+from utils import (ATCODER_DOMAIN, ATCODER_PATH, CODEFORCES_DOMAIN,
+                   CODEFORCES_PATH, CONTEST_DETAILS_CACHE, CONTESTS_CACHE,
+                   Markdown)
+
+CONTESTS = None
+CONTEST_DETAILS = None
+CONTEST_TASKS = None
 
 
 def is_comment(text: str, lang: str) -> bool:
@@ -34,16 +33,16 @@ def split_extension(text: str) -> tuple[str, str]:
   last_dot = text.rfind(".")
   if last_dot == -1:
     return (text, None)
-  
+
   return (text[:last_dot], text[last_dot+1:])
 
 def get_link_from_task_file(path: str) -> str:
   """Retrieves the text on the first line of the file if its a comment."""
-  with open(path, "r") as f:
+  with open(path, "r", encoding="utf-8") as f:
     # grab comment on first line
     first_line = f.readline()
 
-  basename, ext = split_extension(os.path.basename(path))
+  _, ext = split_extension(os.path.basename(path))
   if not is_comment(first_line, ext):
     return None
 
@@ -55,10 +54,11 @@ def get_link_from_task_file(path: str) -> str:
   for suffix in suffixes:
     first_line = first_line.removesuffix(suffix)
   href = first_line.strip()
-  
+
   return href
 
 def get_task_code_from_filename(filename: str) -> str:
+  """Retrieves the task code from a filename."""
   basename, _ = split_extension(filename)
   _, task_code = basename.split("_", 1)
   task_code = task_code.split("_", 1)[0]
@@ -70,22 +70,23 @@ def count_tasks(directory: str) -> int:
   for _, _, filenames in os.walk(directory):
     if len(filenames) == 0:
       continue
-    
+
     tasks = set()
     for name in filenames:
       basename, _ = split_extension(name)
       _, task_code = basename.split("_", 1)
       task_code = task_code.split("_", 1)[0]
-      
+
       tasks.add(task_code)
 
     total += len(tasks)
   return total
 
+# pylint: disable=C0116
 def get_missing_tasks(path: str) -> list[str]:
   files = os.listdir(path)
 
-  all_tasks = contest_details["task_name"].keys()
+  all_tasks = CONTEST_DETAILS["task_name"].keys()
 
   tasks_solved = set()
   contest_code = os.path.basename(path)
@@ -93,7 +94,7 @@ def get_missing_tasks(path: str) -> list[str]:
     task_code = get_task_code_from_filename(file)
     tasks_solved.add(task_code)
 
-  all_tasks = set(contest_tasks[contest_code])
+  all_tasks = set(CONTEST_TASKS[contest_code])
   return list(all_tasks - tasks_solved)
 
 def get_missing_tasks_fom_dir(directory: str) -> list[tuple[str, str]]:
@@ -108,11 +109,12 @@ def get_missing_tasks_fom_dir(directory: str) -> list[tuple[str, str]]:
 
   return all_missing_tasks
 
-def dir_to_collapsed_section(directory: str, start_level: int, file_parser: typing.Callable[[str], str]):
+def dir_to_collapsed_section(directory: str, start_level: int,
+                             file_parser: typing.Callable[[str], str]):
   """Generates a collapsed section based on the directory."""
   def traverse(path: str, level: str) -> str:
     files_and_dir = sorted(os.listdir(path))
-    
+
     lines = []
     for fd in files_and_dir:
       if os.path.isdir(os.path.join(path, fd)):
@@ -120,7 +122,7 @@ def dir_to_collapsed_section(directory: str, start_level: int, file_parser: typi
         lines.extend(result.split("\n"))
       else:
         lines.append(f"- {file_parser(os.path.join(path, fd))}")
-    
+
     if level < start_level:
       return "\n".join(lines)
 
@@ -129,17 +131,17 @@ def dir_to_collapsed_section(directory: str, start_level: int, file_parser: typi
       lines=lines
     )
     return section
-  
+
   return traverse(directory, 0)
 
-def load_cache():
+def load_cache() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
   """Loads cached names and links from contest data."""
-  global contests
-  global contest_details
-  global contest_tasks
   contests = pd.read_csv(CONTESTS_CACHE).set_index("contest_code").to_dict()
-  contest_details = pd.read_csv(CONTEST_DETAILS_CACHE).set_index(["contest_code", "task_code"]).to_dict()
-  contest_tasks = pd.read_csv(CONTEST_DETAILS_CACHE).groupby("contest_code")["task_code"].apply(list).to_dict()
+  contest_details = pd.read_csv(CONTEST_DETAILS_CACHE)\
+      .set_index(["contest_code", "task_code"]).to_dict()
+  contest_tasks = pd.read_csv(CONTEST_DETAILS_CACHE)\
+      .groupby("contest_code")["task_code"].apply(list).to_dict()
+  return contests, contest_details, contest_tasks
 
 def atcoder_cf_parser(path: str, base_link: str) -> str:
   if os.path.isfile(path):
@@ -148,15 +150,17 @@ def atcoder_cf_parser(path: str, base_link: str) -> str:
     contest_code, task_code = basename.split("_", 1)
     task_code = task_code.split("_", 1)[0]
 
-    task_name = contest_details["task_name"][(contest_code, task_code)]
-    task_link = f"{base_link}{contest_details["task_link"][(contest_code, task_code)]}"
+    task_name = CONTEST_DETAILS["task_name"][(contest_code, task_code)]
+    task_link = f"{base_link}{CONTEST_DETAILS["task_link"][(contest_code, task_code)]}"
 
     relative_link = f"/{path.replace(" ", "%20")}"
-    return f"{Markdown.link(text=filename, href=relative_link)} - {Markdown.link(text=task_name, href=task_link)}"
+    filename_md = Markdown.link(text=filename, href=relative_link)
+    taskname_md = Markdown.link(text=task_name, href=task_link)
+    return f"{filename_md} - {taskname_md}"
 
   dirname = os.path.basename(path)
-  if dirname in contests["contest_name"]:
-    dirname = f"{dirname} - {contests["contest_name"][dirname]}"
+  if dirname in CONTESTS["contest_name"]:
+    dirname = f"{dirname} - {CONTESTS["contest_name"][dirname]}"
   return dirname
 
 
@@ -164,9 +168,9 @@ def all_problems_section(targets: list[tuple[str,str]]) -> str:
   collapsed_sections = []
   for path, base_link in targets:
     current_section = dir_to_collapsed_section(
-      path, 
+      path,
       start_level=0,
-      file_parser=lambda x: atcoder_cf_parser(x, base_link=base_link)
+      file_parser=lambda x, base_link=base_link: atcoder_cf_parser(x, base_link=base_link)
     )
     collapsed_sections.append(current_section)
 
@@ -176,34 +180,37 @@ def all_problems_section(targets: list[tuple[str,str]]) -> str:
     *collapsed_sections
   ])
 
+# pylint: disable=too-many-locals
 def missing_problems_section(targets: list[tuple[str,str]]) -> str:
   contest_lines = []
   for path, base_link in targets:
     missing_problems = get_missing_tasks_fom_dir(path)
     if len(missing_problems) == 0:
       continue
-    
+
     missing_problems.sort()
-    missing_problems_by_contest = dict()
+    missing_problems_by_contest = {}
     for key, value in missing_problems:
       missing_problems_by_contest.setdefault(key, []).append(value)
-    
+
     for contest_code, tasks in missing_problems_by_contest.items():
       task_lines = []
       for task_code in tasks:
-        task_name = contest_details["task_name"][(contest_code, task_code)]
-        task_link = contest_details["task_link"][(contest_code, task_code)]
-        task_lines.append(f"- {task_code} - {Markdown.link(text=task_name, href=f"{base_link}{task_link}")}")
+        task_name = CONTEST_DETAILS["task_name"][(contest_code, task_code)]
+        task_link = CONTEST_DETAILS["task_link"][(contest_code, task_code)]
+
+        task_md = Markdown.link(text=task_name, href=f"{base_link}{task_link}")
+        task_lines.append(f"- {task_code} - {task_md}")
 
       collapsed_contest = Markdown.collapsed_section(
-        summary=f"{contest_code} - {contests["contest_name"][contest_code]}",
+        summary=f"{contest_code} - {CONTESTS["contest_name"][contest_code]}",
         lines=task_lines
       )
       contest_lines.append(collapsed_contest)
 
   if len(contest_lines) == 0:
     return 0
-  
+
   return "\n".join([
     "To Upsolve",
     Markdown.hrule(),
@@ -217,23 +224,30 @@ def usage_instructions() -> str:
     "This section is mainly for my future self, but this also serves as instructions \
       for anyone who wants to clone this repository to track their own solutions.",
     "",
-    "To update the README, simply run `update_readme.py`. This will crawl the target folders and update the the README accordingly. \
-      The target directories can have any number of subdirectories for organization, but the final directory (i.e., the directory that contains files) \
+    "To update the README, simply run `update_readme.py`. This will crawl the target folders \
+      and update the the README accordingly. \
+      The target directories can have any number of subdirectories for organization, \
+      but the final directory (i.e., the directory that contains files) \
       must follow a specific format, depending on the website.",
     "- For AtCoder, this is the name of the contest as it appears in the URL.",
-    "- For Codeforces, a prefix is added to differentiate it from other contests. For Codeforces regular contests, a 'CFC' prefix is used.",
+    "- For Codeforces, a prefix is added to differentiate it from other contests. \
+      For Codeforces regular contests, a 'CFC' prefix is used.",
     "",
-    "To add sections to the README, you must add lines to the `update_readme.py` file directly. There is a `Markdown` class in `utils.py` with helper functions for \
+    "To add sections to the README, you must add lines to the `update_readme.py` file directly.\
+      There is a `Markdown` class in `utils.py` with helper functions for \
       different markdown syntax."
   ]
 
-  return "\n".join(lines);
+  return "\n".join(lines)
 
 
 def main():
-  subprocess.run(["python3", "update_links.py"])
-  load_cache()
-  
+  subprocess.run(["python3", "update_links.py"], check=True)
+
+  # pylint: disable=global-statement
+  global CONTESTS, CONTEST_DETAILS, CONTEST_TASKS
+  CONTESTS, CONTEST_DETAILS, CONTEST_TASKS = load_cache()
+
   target_folders = [ATCODER_PATH, CODEFORCES_PATH]
   target_domains = [ATCODER_DOMAIN, CODEFORCES_DOMAIN]
   targets = list(zip(target_folders, target_domains))
